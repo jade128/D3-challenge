@@ -105,8 +105,8 @@ d3.csv("./assets/data/data.csv").then(function(jourData, err) {
     .attr("value", "poverty") // value to grab for event listener
     .text("In Poverty (%)");
 
-// Create label group for y-axis labels
-  var yLabelsGroup = chartGroup.append("g")
+// Create label for y-axis labels
+  var yLabels = chartGroup.append("g")
     .attr("transform", `translate(${0 - margin.left/4}, ${(sctHeight/2)})`)
     .append("text")
     .attr("x", 0)
