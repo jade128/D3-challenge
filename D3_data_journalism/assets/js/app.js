@@ -1,11 +1,11 @@
 // @TODO: YOUR CODE HERE!
 var svgWidth = 960;
-var svgHeight = 500;
+var svgHeight = 600;
 
 var margin = {
   top: 20,
   right: 40,
-  bottom: 80,
+  bottom: 120,
   left: 100
 };
 
@@ -14,9 +14,8 @@ var sctHeight = svgHeight - margin.top - margin.bottom;
 
 // Create an SVG wrapper, append an SVG group that will hold our chart,
 // and shift the latter by left and top margins.
-var svg = d3
-  .select("#scatter")
-  .append("svg")
+
+var svg = d3.select("#scatter").append("svg")
   .attr("width", svgWidth)
   .attr("height", svgHeight);
 
@@ -26,7 +25,7 @@ var chartGroup = svg.append("g")
 
 // Initial Params
 var chosenXAxis = "poverty";
-var chosenYAxis = "healthcare",
+var chosenYAxis = "healthcare";
 
 // function used for updating x-scale var upon click on axis label
 function xScale(jourData, chosenXAxis) {
@@ -93,7 +92,7 @@ function renderCircles(circlesGroup, newXScale, chosenXAxis,newYScale, chosenYAx
 
 // function used for updating state labels with a transition to
 // new state
-function renderCircles(textGroup, newXScale, chosenXAxis,newYScale, chosenYAxis) {
+function renderText(textGroup, newXScale, chosenXAxis,newYScale, chosenYAxis) {
 
     textGroup.transition()
       .duration(1000)
@@ -202,10 +201,10 @@ d3.csv("./assets/data/data.csv").then(function(jourData, err) {
     .data(jourData)
     .enter()
     .append("circle")
+    .classed("stateCircle",true)
     .attr("cx", d => xLinearScale(d[chosenXAxis]))
     .attr("cy", d => yLinearScale(d[chosenYAxis]))
-    .attr("r", 15)
-    .attr("fill", "lightblue")
+    .attr("r", 10)
     .attr("opacity", ".5");
 
   // append initial text
@@ -213,9 +212,10 @@ d3.csv("./assets/data/data.csv").then(function(jourData, err) {
     .data(jourData)
     .enter()
     .append("text")
+    .classed("stateText",true)
     .attr("cx", d => xLinearScale(d[chosenXAxis]))
     .attr("cy", d => yLinearScale(d[chosenYAxis]))
-    .attr("dy", 5)
+    .attr("dy", 3)
     .attr("font-size", "10px")
     .text(function(d){return d.abbr});
 
@@ -256,7 +256,7 @@ d3.csv("./assets/data/data.csv").then(function(jourData, err) {
     .classed("active",true)
     .attr("x", 0)
     .attr("y",0 - 20)
-    .attr("dy", "lem")
+    .attr("dy", "1em")
     .attr("transform", "rotate(-90)")
     .attr("value", "healthcare") // value to grab for event listener
     .text("Lacks Healthcare (%)");
@@ -266,7 +266,7 @@ d3.csv("./assets/data/data.csv").then(function(jourData, err) {
     .classed("inactive",true)
     .attr("x", 0)
     .attr("y",0 - 40)
-    .attr("dy", "lem")
+    .attr("dy", "1em")
     .attr("transform", "rotate(-90)")
     .attr("value", "smokes") // value to grab for event listener
     .text("Smokes (%)");
@@ -276,7 +276,7 @@ d3.csv("./assets/data/data.csv").then(function(jourData, err) {
     .classed("inactive",true)
     .attr("x", 0)
     .attr("y",0 - 60)
-    .attr("dy", "lem")
+    .attr("dy", "1em")
     .attr("transform", "rotate(-90)")
     .attr("value", "obesity") // value to grab for event listener
     .text("Obese (%)");
@@ -417,3 +417,5 @@ d3.csv("./assets/data/data.csv").then(function(jourData, err) {
 }).catch(function(error) {
   console.log(error);
 });
+
+
