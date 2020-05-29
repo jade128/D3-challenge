@@ -29,53 +29,53 @@ var chosenYAxis = "obesity";
 
 // updating x-scale var upon click on axis label
 function xScale(jourData, chosenXAxis) {
-  // create scales
-  var xLinearScale = d3.scaleLinear()
-    .domain([d3.min(jourData, d => d[chosenXAxis]) * 0.8,
-      d3.max(jourData, d => d[chosenXAxis]) * 1.2
-    ])
-    .range([0, sctWidth]);
+    // create scales
+    var xLinearScale = d3.scaleLinear()
+      .domain([d3.min(jourData, d => d[chosenXAxis]) * 0.8,
+        d3.max(jourData, d => d[chosenXAxis]) * 1.2
+      ])
+      .range([0, sctWidth]);
 
-  return xLinearScale;
+    return xLinearScale;
 }
 
 // updating y-scale var upon click on axis label
 function yScale(jourData, chosenYAxis) {
-    var yLinearScale = d3.scaleLinear()
-      .domain([d3.min(jourData, d => d[chosenYAxis]) * 0.8,
-        d3.max(jourData, d => d[chosenYAxis]) * 1.2
-      ])
-      .range([sctHeight,0]);
-    return yLinearScale;
+      var yLinearScale = d3.scaleLinear()
+        .domain([d3.min(jourData, d => d[chosenYAxis]) * 0.8,
+          d3.max(jourData, d => d[chosenYAxis]) * 1.2
+        ])
+        .range([sctHeight,0]);
+      return yLinearScale;
   }
 
 //  updating xAxis var upon click on axis label
 function renderAxesX(newXScale, xAxis) {
-  var bottomAxis = d3.axisBottom(newXScale);
-  xAxis.transition()
-    .duration(1000)
-    .call(bottomAxis);
+    var bottomAxis = d3.axisBottom(newXScale);
+    xAxis.transition()
+      .duration(1000)
+      .call(bottomAxis);
 
-  return xAxis;
+    return xAxis;
 }
 
 // updating xAxis var upon click on axis label
 function renderAxesY(newYScale, yAxis) {
-    var leftAxis = d3.axisLeft(newYScale);
-    yAxis.transition()
-      .duration(1000)
-      .call(leftAxis);
-  
-    return yAxis;
+      var leftAxis = d3.axisLeft(newYScale);
+      yAxis.transition()
+        .duration(1000)
+        .call(leftAxis);
+    
+      return yAxis;
   }
 
 function renderCircles(circlesGroup, newXScale, chosenXAxis,newYScale, chosenYAxis) {
-  circlesGroup.transition()
-    .duration(1000)
-    .attr("cx", d => newXScale(d[chosenXAxis]))
-    .attr("cy", d => newYScale(d[chosenYAxis]));
+    circlesGroup.transition()
+      .duration(1000)
+      .attr("cx", d => newXScale(d[chosenXAxis]))
+      .attr("cy", d => newYScale(d[chosenYAxis]));
 
-  return circlesGroup;
+    return circlesGroup;
 }
 
 
@@ -89,57 +89,61 @@ function renderText(textGroup, newXScale, chosenXAxis,newYScale, chosenYAxis) {
   }
 
  //updating corresponding  unit for chosen values showed on tooltipa
-function xUnits(unit, xData) {
-    if (xData==='poverty'){
-        return '${value}%';
-    }
-    else if (xData==='income'){
-        return '$${value}';
-    }
-    else {
-        return '${value}';
-    }
+function xUnits(unitV, xData) {
+      if (xData==='poverty') {
+          return `${unitV}%`;
+
+      }
+      else if (xData==='income'){
+          return `$${unitV}`;
+
+      }
+      else {
+          return `${unitV}`;
+      }
+
 }
 
 //updating circles group with new tooltip
-function updateToolTip(chosenXAxis,chosenXAxis,circlesGroup) {
-    // x Lable
-  var xLabel;
-  if (chosenXAxis === "poverty") {
-    xLabel = "Poverty:";
-  }
-  else if (chosenXAxis === "income") {
-    xLabel = "Median Income:";
-  }
-  else {
-    xLabel = "Age:";
-  }
-  //y Label
-  var yLabel;
-  if (chosenYAxis === "healthcare") {
-    yLabel = "No Healthcare:";
-  }
-  else if (chosenYAxis === "obesity") {
-    yLabel = "Obesity:";
-  }
-  else {
-    yLabel = "Smokes:";
-  }
- 
+function updateToolTip(chosenXAxis,chosenYAxis,circlesGroup) {
+      // x Lable
+    var xLabel;
+    if (chosenXAxis === "poverty") {
+      xLabel = "Poverty:";
+    }
+    else if (chosenXAxis === "income") {
+      xLabel = "Median Income:";
+    }
+    else {
+      xLabel = "Age:";
+    }
+    //y Label
+    var yLabel;
+    if (chosenYAxis === "healthcare") {
+      yLabel = "No Healthcare:";
+    }
+    else if (chosenYAxis === "obesity") {
+      yLabel = "Obesity:";
+    }
+    else {
+      yLabel = "Smokes:";
+    }
+  
 
-  var toolTip = d3.tip()
-    .attr("class", "d3-tip")
-    .offset([80, -60])
-    .html(function(d) {
-      return (`${d.state}<br>${xLabel} ${xUnits(d[chosenXAxis],chosenXAxis)}<br>${yLabel} ${d[chosenYAxis]}`);
-    });
+    var toolTip = d3.tip()
+      .attr("class", "d3-tip")
+      .offset([80, -60])
+      .html(function(d) {
+        return (`${d.state}<br>${xLabel} ${xUnits(d[chosenXAxis],chosenXAxis)}<br>${yLabel} ${d[chosenYAxis]}`);
+        // return (`${d.state}<br>${xLabel} ${d[chosenXAxis]}<br>${yLabel} ${d[chosenYAxis]}`);
+      });
 
-  circlesGroup.call(toolTip);
+    circlesGroup.call(toolTip);
 
-  circlesGroup.on("mouseover",toolTip.show)
-    .on("mouseout",toolTip.hide);
+    circlesGroup.on("mouseover",toolTip.show)
+      .on("mouseout",toolTip.hide);
 
-  return circlesGroup;
+    return circlesGroup;
 }
 
 // Retrieve data from the CSV file and execute everything below
